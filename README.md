@@ -41,7 +41,7 @@ Gets an array of existing entries
 
 
 ### GET /entries
-Get an array of existing entries
+Get a single entry
 
 - `@param {String} id`: The ID of the entry to return 
 - **`@returns {Object}`**: The entry that was matched the provided ID
