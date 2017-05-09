@@ -1,0 +1,59 @@
+html, 
+body, 
+ul {
+   
+    margin: 0;
+    padding: 0;
+    font-family: "Lucida Bright", Georgia, serif;
+}
+
+
+.header {
+
+    text-align: center;
+    padding: 50px;
+
+}
+
+.avatar {
+    
+    height: 65px;
+    width: auto;
+}
+
+.image-wrapper {
+
+    width: 100px;
+
+}
+.contact-name {
+
+    width: 350px;
+
+}
+
+.contact-number {
+
+    width: 200px;
+
+}
+
+.contact-list {
+    
+    list-style-type: none;
+    width: 100%;
+
+}
+
+.contact-list .col {
+
+    vertical-align: middle;
+    text-align: center;
+
+}
+
+input[required]:hover {
+    
+    border: 1px solid red;
+    
+}
