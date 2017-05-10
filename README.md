@@ -58,7 +58,26 @@ Gets an array of existing entries
 
 
 ### GET /entries
-Get a single entry
+Gets an Object containing the resulting entries and some additional meta data
+
+- `@param {String} [from]`: A non negative integer. If passed, it is used as the starting index of the returned entries
+- `@param {String} [limit]`: A non negative integer. If passed, it is used as the maximum number of entries to be returned
+- `@param {String} [sort]`: **asc** or **desc** If passed, sorts the results by their lastModified property either in ascending or descending order as specified
+- `@param {String} [contains]`: If passed, only the entries with messages containing the provided text will be returned
+- **`@returns {Object[]}`**: An Object with the following signature:
+~~~~
+{
+    from: number,       // The starting index of the returned entries,
+    limit: number,      // The maximum number of entries returned. -1 indicates no limit
+    total: number,      // The total number of entries stored in the data base
+    entries: Object[]   // The entries
+}
+~~~~
+
+
+
+### GET /entries
+Gets a single entry
 
 - `@param {String} id`: The ID of the entry to return 
 - **`@returns {Object}`**: The entry that was matched the provided ID
