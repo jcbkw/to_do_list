@@ -33,9 +33,31 @@ ul {
     padding: 20px 10px; 
     
 }
+.col {
+    
+  border-bottom: 1px solid #BDBDBD;
+    
+}
 
+.row:last-child .col  {
+    
+    border-bottom: none;
+    
+} 
 input[required]:hover {
     
     border: 1px solid red;
+    
+}
+
+.row.checked {
+    
+    color: #ccc;
+    
+}
+
+.row.checked .item-message{
+    
+    text-decoration: line-through;
     
 }

@@ -1,8 +1,7 @@
-
 ///**
 // * Create a new ajax POST request.
 // * 
-// * Takes parameters. As argumments they are encoded and passed to the server.
+// * Takes parameters as an *object* Key and values are encoded and passed to the server.
 // * 
 // * Sends our post with one argument (payload).
 // * 
@@ -12,18 +11,18 @@
 // * 
 // * returns the xhr object
 // * 
-// * @param {type} url
-// * @param {type} params
-// * @param {type} callback
+// * @param {type} string (url)
+// * @param {type} object (params)
+// * @param {type} function (callback)
 // * @returns {XMLHttpRequest|xhrPost.xhr}
 // * 
 
-function xhrPost (url, params, callback) {
+function xhrGeneric (method, url, params, callback) {
         
     var xhr = new XMLHttpRequest(),
         payload;
 
-    xhr.open("POST", url, /*async*/true);
+    xhr.open(method, url, /*async*/true);
 
     xhr.addEventListener("load", function (event) {
 
@@ -66,6 +65,67 @@ function xhrPost (url, params, callback) {
 
 }
 
+///**
+// * Create a new ajax POST request.
+// * 
+// * Takes parameters. As argumments they are encoded and passed to the server.
+// * 
+// * Sends our post with one argument (payload).
+// * 
+// * Appends a callback function to an event listener "load" (complete)that has two parameters
+// * - the first parameter is built in error handle
+// * - the second parameter is a capture of the server's response 
+// * 
+// * returns the xhr object
+// * 
+// * @param {type} url
+// * @param {type} params
+// * @param {type} callback
+// * @returns {XMLHttpRequest|xhrPost.xhr}
+// * 
+
+function xhrPost (url, params, callback) {
+        
+    return xhrGeneric("POST", url, params, callback);
+
+}
+
+///**
+// * Create a new ajax POST request.
+// * 
+// * Takes parameters. As argumments they are encoded and passed to the server.
+// * 
+// * Sends our post with one argument (payload).
+// * 
+// * Appends a callback function to an event listener "load" (complete)that has two parameters
+// * - the first parameter is built in error handle
+// * - the second parameter is a capture of the server's response 
+// * 
+// * returns the xhr object
+// * 
+// * @param {type} url
+// * @param {type} params
+// * @param {type} callback
+// * @returns {XMLHttpRequest|xhrPost.xhr}
+// * 
+
+function xhrDelete (url, params, callback) {
+        
+    return xhrGeneric("DELETE", url, params, callback);
+
+}
+
+function xhrPatch (url, params, callback) {
+        
+    return xhrGeneric("PATCH", url, params, callback);
+
+}
+
+function xhrPut (url, params, callback) {
+        
+    return xhrGeneric("PUT", url, params, callback);
+
+}
 function xhrGet (url, params, callback) {
         
     var xhr = new XMLHttpRequest(),

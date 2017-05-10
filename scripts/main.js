@@ -55,8 +55,8 @@
             liElement.classList.add("row", "light-primary-color");
             h3Element.classList.add( "col", "item-message");
             liElement.setAttribute("item-id", data.id);
-            checkElement.classList.add("fa", "fa-check-square-o", "fa-lg", "delete-item");
-            editElement.classList.add("fa", "fa-pencil", "fa-lg", "edit-item");
+            checkElement.classList.add("col", "fa", "fa-check-square-o", "fa-lg", "delete-item");
+            editElement.classList.add("col", "fa", "fa-pencil", "fa-lg", "edit-item");
 
             h3Element.appendChild(listText);
             liElement.appendChild(checkElement);
