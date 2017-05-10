@@ -57,6 +57,62 @@ var api = {
                 
             }
             
+            // (optional) limit and from
+            var limit = getNonNegativeInteger('limit', Number.NaN),
+                from = getNonNegativeInteger('from', Number.NaN),
+                hasLimit = !isNaN(limit),
+                hasFrom = !isNaN(from);
+                
+            if (hasLimit || hasFrom) {
+                
+                var total = result.length;
+                
+                if (hasFrom) {
+                    
+                    if (from >= result.length) {
+                        
+                        result.length = 0;
+                        
+                    }
+                    else {
+                        
+                        result = result.slice(from);
+                        
+                    }
+                    
+                }
+                else {
+                    
+                    from = 0;
+                    
+                }
+                
+                if (hasLimit) {
+                    
+                    if (limit < result.length) {
+                        
+                        result = result.slice(0, limit);
+                        
+                    }
+                    
+                }
+                else {
+                    
+                    limit = -1;
+                    
+                }
+                
+                response.status(200).json({
+                    from: from,
+                    limit: limit,
+                    total: total,
+                    entries: result
+                });
+                
+                return;
+                
+            }
+            
             response.status(200).json(result);
                         
         });
@@ -72,6 +128,7 @@ var api = {
             data[id] =  {
                 lastModified: Date.now(),
                 message: get('message'),
+                status: 0,
                 id: id
             };
             
@@ -94,6 +151,7 @@ var api = {
             if (data.hasOwnProperty(id)) {
 
                 data[id].message = get('message');
+                data[id].status = getNonNegativeInteger('status');
                 
                 // (optional) silent = don't update last modified 
                 if (!JSON.parse(String(get('silent', false)))) {
@@ -107,6 +165,66 @@ var api = {
                     response.status(200).json(data[id]);
 
                 });
+
+            }
+            else {
+
+                response.status(404).json(id);
+
+            }
+             
+        });
+
+    },
+    
+    PATCH: function (request, response, storage) {
+        
+        storage.read(function (data) {
+            
+            var id = get('id');
+
+            if (data.hasOwnProperty(id)) {
+                
+                var entry = data[id],
+                    hasChanged = false,
+                    message = get('message', null),
+                    status = getNonNegativeInteger('status', Number.NaN);
+                    
+                if (message !== null) {
+                    
+                    entry.message = message;
+                    hasChanged = true;
+                    
+                }
+                
+                if (!isNaN(status)) {
+                    
+                    entry.status = status;
+                    hasChanged = true;
+                    
+                }
+                
+                if (hasChanged) {
+                    
+                    // (optional) silent = don't update last modified 
+                    if (!JSON.parse(String(get('silent', false)))) {
+
+                        entry.lastModified = Date.now();
+
+                    }
+
+                    storage.write(function () {
+
+                        response.status(200).json(entry);
+
+                    });
+                    
+                }
+                else {
+                    
+                    response.status(304).json(entry);
+                    
+                }
 
             }
             else {
@@ -205,6 +323,26 @@ function createParameterGetter (request) {
         }
         
     };
+    
+}
+
+function getNonNegativeInteger (name, defaultValue) {
+    
+    var value = get.apply(this, arguments);
+    
+    if (!value && arguments.length > 1) {
+        
+        return defaultValue;
+        
+    }
+    
+    if ((/^[0-9]+$/).test(value)) {
+        
+        return parseInt(value, 10);
+        
+    }
+    
+    throw new ClientError('The parameter "' + name + '" is must be a non-negative integer! "' + value + '" is not acceptable!');
     
 }
 

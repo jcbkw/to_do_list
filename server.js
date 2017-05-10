@@ -12,6 +12,7 @@ app.use(bodyParser.json());
 app.get('/entries', entries);
 app.put('/entries', entries);
 app.post('/entries', entries);
+app.patch('/entries', entries);
 app.delete('/entries', entries);
 
 app.use('/', express.static(__dirname));

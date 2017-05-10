@@ -14,12 +14,29 @@ Creates a new entry
 
 
 ### PUT /entries
-Updates the message of an existing entry
+Updates the message and completion status of an existing entry
 
 - `@param {String} id`: The ID of the entry to update
 - `@param {String} message`: The new message
+- `@param {Number} status`: The new completion status. Must be a positive integer.
 - `@param {Boolean} [silent]`: If true, the lastModified property of the entry will not be updated
 - **`@returns {Object}`**: The entry that was updated 
+
+
+
+### PATCH /entries
+Updates selective properties of an existing entry
+The `message` or `status` properties can be selectively updated
+
+The difference between PATCH and PUT is that the ladder requires 
+the provision of all the entry properties, whereas PATCH lets one
+pick and choose
+
+- `@param {String} id`: The ID of the entry to update
+- `@param {String} [message]`: The new message. Must be a non-empty string if provided.
+- `@param {Number} [status]`: The new completion status. Must be a positive integer if provided.
+- `@param {Boolean} [silent]`: If true, the lastModified property of the entry will not be updated
+- **`@returns {Object}`**: The entry that was patched 
 
 
 
