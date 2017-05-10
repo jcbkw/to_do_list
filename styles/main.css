@@ -1,0 +1,41 @@
+html, 
+body, 
+ul {
+   
+    margin: 0;
+    padding: 0;
+}
+
+
+.header {
+
+    text-align: center;
+    padding: 20px;
+
+}
+
+.item-message {
+
+    width: 100%;
+    padding: 0px 20px;
+}
+
+
+.item-list {
+    
+    list-style-type: none;
+    vertical-align: middle;
+    
+}
+
+.item-list div {
+    
+    padding: 20px 10px; 
+    
+}
+
+input[required]:hover {
+    
+    border: 1px solid red;
+    
+}
