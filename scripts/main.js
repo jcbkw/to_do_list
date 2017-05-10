@@ -10,12 +10,11 @@
             ulElement = document.createElement("ul"),
             content = document.createTextNode(title);
 
-            ulElement.classList.add( "table", "contact-list");
+            ulElement.classList.add( "table", "item-list");
             mainElement.classList.add( "main-wrapper");
-            section1.classList.add( "header-wrapper");
-            section2.classList.add( "main-content");
-            header.classList.add( "header", "text-primary-color", "divider-color",
-                                   "light-primary-color");
+            section1.classList.add( "header-wrapper", "container", "col-md-5", "col-md-offset-4");
+            section2.classList.add( "main-content", "container", "col-md-5", "col-md-offset-4");
+            header.classList.add( "header", "text-primary-color");
 
             h1Element.appendChild(content);
             header.appendChild(h1Element);
@@ -33,13 +32,11 @@
     
         var ulElement = document.getElementsByTagName("ul")[0],
             liElementCount = 0,
-            deleteElement,
+            checkElement,
             editElement,
             liElement,
-            h2Element,
             listIndex,
             h3Element,
-            pElement,
             listText;
 
 
@@ -49,26 +46,21 @@
 
             liElementCount +=1;  //May use this to index as a unique identifier for contacts.           
             liElement = document.createElement("li");
-            h2Element = document.createElement("h2");
             h3Element = document.createElement("h3");
-            pElement = document.createElement("p");
-            deleteElement = document.createElement("div");
+            checkElement = document.createElement("div");
             editElement = document.createElement("div");
             listText = document.createTextNode(data.message);
             listIndex = document.createTextNode(i);
 
-            liElement.classList.add("row", "contact", "light-primary-color");
-            h2Element.classList.add( "col", "contact-name");
-            h3Element.classList.add( "col", "contact-name");
-            liElement.setAttribute("contact-id", data.id);
-            deleteElement.classList.add("fa", "fa-trash", "fa-lg", "delete-item");
+            liElement.classList.add("row", "light-primary-color");
+            h3Element.classList.add( "col", "item-message");
+            liElement.setAttribute("item-id", data.id);
+            checkElement.classList.add("fa", "fa-check-square-o", "fa-lg", "delete-item");
             editElement.classList.add("fa", "fa-pencil", "fa-lg", "edit-item");
 
-            h2Element.appendChild(listIndex);
             h3Element.appendChild(listText);
-            liElement.appendChild(h2Element);
+            liElement.appendChild(checkElement);
             liElement.appendChild(h3Element);
-            liElement.appendChild(deleteElement);
             liElement.appendChild(editElement);
 
             ulElement.appendChild(liElement);  
