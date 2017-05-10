@@ -1,23 +1,32 @@
 {
     "15be9eda0fe": {
         "lastModified": 1494424003522,
-        "message": "Everything",
+        "message": "create games tomorrow",
         "id": "15be9eda0fe",
-        "status": 4
+        "status": 0
     },
     "15be9ee06c8": {
         "lastModified": 1494278339246,
         "message": "move the car",
-        "id": "15be9ee06c8"
+        "id": "15be9ee06c8",
+        "status": 0
     },
     "15be9ee5840": {
         "lastModified": 1494278361163,
         "message": "refactor address book app",
-        "id": "15be9ee5840"
+        "id": "15be9ee5840",
+        "status": 0
+    },
+    "15be9ff5840": {
+        "lastModified": 1494278361164,
+        "message": "eat later",
+        "id": "15be9ff5840",
+        "status": 0
     },
     "15be9eec818": {
         "lastModified": 1494278883349,
-        "message": "move the trash out, and buy some grey poupon",
-        "id": "15be9eec818"
+        "message": "move the trash out",
+        "id": "15be9eec818",
+        "status": 0
     }
 }
