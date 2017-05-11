@@ -17,7 +17,7 @@ ul {
 .item-message {
 
     width: 100%;
-    padding: 0px 20px;
+    
 }
 
 
@@ -28,14 +28,33 @@ ul {
     
 }
 
-.item-list div {
-    
-    padding: 20px 10px; 
-    
-}
 .col {
     
-  border-bottom: 1px solid #BDBDBD;
+    vertical-align: middle;
+    height: 48px;
+    border-bottom: 1px solid #ccc;
+    
+}
+
+.action-item{
+    
+    border: none;
+    background: none;
+    outline: none;
+    color: #888;
+    
+}
+
+.action-item:hover{
+    
+    color: #333;
+    
+}
+
+.col.action {
+    
+    width: 48px;
+    text-align: center;
     
 }
 
@@ -53,6 +72,13 @@ input[required]:hover {
 .row.checked {
     
     color: #ccc;
+    cursor: default;
+    
+}
+
+.row.checked .edit-item{
+    
+    display: none;
     
 }
 
