@@ -22,11 +22,8 @@ ul {
 
 .new-entry {
     
-   width: 100%;
-   background-color: #F5F5F5;
-   border:none;
-   outline:none;
    padding-left: 15px;
+   
 }
 
 
@@ -124,5 +121,17 @@ input[required]:hover {
 .row.checked .item-message{
     
     text-decoration: line-through;
+    
+}
+
+.editing {
+    
+   color: blue;
+    
+}
+
+.row.checked .edit-item{
+    
+    display: none;
     
 }

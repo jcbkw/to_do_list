@@ -34,7 +34,7 @@
             newEntryRow.classList.add("row", "light-primary-color");
             figureElement.classList.add("img-wrapper");
             imgElement.classList.add("header-icon");
-            textInput.classList.add("new-entry");
+            textInput.classList.add("new-entry", "seamless");
             newEntryInputWrapper.classList.add("col");
             
             
@@ -77,6 +77,8 @@
             checkElement,
             deleteElement,
             deleteColumn,
+            editElement,
+            editColumn,
             checkColumn,
             column,
             row,
@@ -93,6 +95,7 @@
             listText = document.createTextNode(todoItem.message);
             checkElement = document.createElement("button");
             deleteElement = document.createElement("button");
+            editElement = document.createElement("button");
             column = document.createElement("div");
             todoMessage = document.createElement("span");
             row = document.createElement("li");
@@ -104,19 +107,24 @@
             row.setAttribute("item-status", todoItem.status);
             checkElement.classList.add("fa", "fa-check-square-o", "fa-lg", "check-item", "action-item");
             deleteElement.classList.add( "fa", "fa-times", "fa-lg", "delete-item", "action-item");
+            editElement.classList.add( "fa", "fa-pencil", "fa-lg", "edit-item", "action-item");
             checkElement.setAttribute("type", "button");
             deleteElement.setAttribute("type", "button");
+            editElement.setAttribute("type", "button");
 
             checkColumn = column.cloneNode(true);
             checkColumn.classList.add("action");
             deleteColumn = checkColumn.cloneNode(true);
+            editColumn = checkColumn.cloneNode(true);
             
             todoMessage.appendChild(listText);
             column.appendChild(todoMessage);
             checkColumn.appendChild(checkElement);
             deleteColumn.appendChild(deleteElement);
+            editColumn.appendChild(editElement);
             row.appendChild(checkColumn);
             row.appendChild(column);
+            row.appendChild(editColumn);
             row.appendChild(deleteColumn);
 
             ulElement.appendChild(row);  
@@ -197,6 +205,90 @@
 
     }
     
+    function editItem (message) {
+
+        if (message.style.display !== "none") {
+            
+            var updateEntryField = document.createElement("input");
+        
+            updateEntryField.classList.add("seamless", "editing");
+            updateEntryField.value = message.firstChild.nodeValue;
+            updateEntryField.addEventListener("blur", onItemBlurred, false);
+            message.parentNode.appendChild(updateEntryField);
+            message.style.display = "none";
+
+            putCaretInFront(updateEntryField);
+            
+        }
+        
+    }
+    
+    function saveEditItem (input) {
+        
+         var row = input.parentNode.parentNode,
+             id = row.getAttribute("item-id"),
+            payload = {
+                id: id,
+                message: input.value
+            };
+        
+        xhrPatch("/entries", payload, function (error){
+
+            if (error) {
+                
+                return alert(error);
+                
+            }
+            
+            location.reload();
+            
+        });
+        
+    }
+    
+    function handleKeyup (e) {
+        
+        if(e.which === 13) {
+            
+            onItemBlurred(e);
+            
+        }
+        
+        
+    }
+    
+    function putCaretInFront (input){
+        
+        // http://stackoverflow.com/questions/2127221/move-cursor-to-the-beginning-of-the-input-field
+        if (input.createTextRange) {
+            
+            var part = input.createTextRange();
+            part.move("character", 0);
+            part.select();
+            
+        }
+        else if (input.setSelectionRange){
+            
+            input.setSelectionRange(0, 0);
+            
+        }
+        
+        input.focus();
+        
+        
+    }
+    
+    function onItemBlurred(e){
+        
+        if (e.target.classList.contains("editing")){
+             
+            saveEditItem(e.target);
+
+        }
+        
+    }
+    
+    
       // Attachings all relevant DOM event handlers here
       
     function bindEvents () {
@@ -206,7 +298,13 @@
 
         document.querySelector("main")
                 .addEventListener("click", handleItemClick, false);
-
+        
+        document.querySelector("main")
+                .addEventListener("dblclick", handleItemDblClick, false);
+        
+        document.querySelector("main")
+                .addEventListener("keyup", handleKeyup, false);
+        
     }
 
      function formSubmitHandler (e) {
@@ -252,8 +350,30 @@
             markedItem(e.target);
 
         }
+        else if (e.target.classList.contains("edit-item")){
+
+            //the edit button was clicked
+            
+            // fin the message
+            var message = e.target.parentNode.parentNode.querySelector(".item-message");
+            
+            editItem(message);
+
+        }
         
     }
+   
+    function handleItemDblClick (e){
+
+        if (e.target.classList.contains("item-message")){
+
+            //the edit button was clicked
+            editItem(e.target);
+
+        }
+
+    }
+   
    
     document.addEventListener("DOMContentLoaded", function () {
 
