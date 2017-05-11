@@ -121,12 +121,6 @@ input[required]:hover {
     
 }
 
-.row.checked .edit-item{
-    
-    display: none;
-    
-}
-
 .row.checked .item-message{
     
     text-decoration: line-through;

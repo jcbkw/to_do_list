@@ -75,8 +75,8 @@
         var ulElement = document.getElementsByTagName("ul")[1],
             liElementCount = 0,
             checkElement,
-            editElement,
-            editColumn,
+            deleteElement,
+            deleteColumn,
             checkColumn,
             column,
             row,
@@ -92,7 +92,7 @@
             liElementCount +=1;  //May use this to index as a unique identifier for contacts.           
             listText = document.createTextNode(todoItem.message);
             checkElement = document.createElement("button");
-            editElement = document.createElement("button");
+            deleteElement = document.createElement("button");
             column = document.createElement("div");
             todoMessage = document.createElement("span");
             row = document.createElement("li");
@@ -103,21 +103,21 @@
             row.setAttribute("item-id", todoItem.id);
             row.setAttribute("item-status", todoItem.status);
             checkElement.classList.add("fa", "fa-check-square-o", "fa-lg", "check-item", "action-item");
-            editElement.classList.add( "fa", "fa-pencil", "fa-lg", "edit-item", "action-item");
+            deleteElement.classList.add( "fa", "fa-times", "fa-lg", "delete-item", "action-item");
             checkElement.setAttribute("type", "button");
-            editElement.setAttribute("type", "button");
+            deleteElement.setAttribute("type", "button");
 
             checkColumn = column.cloneNode(true);
             checkColumn.classList.add("action");
-            editColumn = checkColumn.cloneNode(true);
+            deleteColumn = checkColumn.cloneNode(true);
             
             todoMessage.appendChild(listText);
             column.appendChild(todoMessage);
             checkColumn.appendChild(checkElement);
-            editColumn.appendChild(editElement);
+            deleteColumn.appendChild(deleteElement);
             row.appendChild(checkColumn);
             row.appendChild(column);
-            row.appendChild(editColumn);
+            row.appendChild(deleteColumn);
 
             ulElement.appendChild(row);  
             
@@ -163,29 +163,37 @@
             }
             
             row.setAttribute("item-status", payload.status);
-            
+           
+         
         });
     
     }
     
-    /* Update the edit function
+    /* Update the delete function
      * 
-     * @param {type} editBtn
+     * @param {type} btn
      * @returns {undefined}
      */
-     function editItem(editBtn){
+     function deleteItem(btn){
 
-        var id = editBtn.parentNode.getAttribute("contact-id");
-        var person = contactMap[id];
-        var otherWindow = window.open("../edit.html?id="+ id, '_blank', 'width=640,height=480');
-        
-        otherWindow.contact = person;
-        otherWindow.focus();
-        otherWindow.addEventListener("unload", function () {
+        var row = btn.parentNode.parentNode, 
+            id = row.getAttribute("item-id"),
+            payload = {
+                id: id
+            };
+             
+        xhrDelete("/entries", payload, function (error){
 
-          location.reload();
-
-        }, /*useCapture */ false);
+            if (error) {
+                
+                return alert(error);
+                
+            }
+            
+            row.parentNode.removeChild(row);
+           
+         
+        });
 
     }
     
@@ -218,16 +226,24 @@
 
         }
 
-        xhrPost("/entries", payload);
+        xhrPost("/entries", payload, function(error){
+                
+                if (!error) {
+                    
+                    location.reload(); 
+                    
+                }
+                
+        });
         
      }
         
     function handleItemClick (e){
 
-        if (e.target.classList.contains("edit-item")){
+        if (e.target.classList.contains("delete-item")){
 
-            //the edit button was clicked
-            editItem(e.target);
+            //the delete button was clicked
+            deleteItem(e.target);
 
         }
         else if (e.target.classList.contains("check-item")){
@@ -236,10 +252,9 @@
             markedItem(e.target);
 
         }
-
+        
     }
    
-  
     document.addEventListener("DOMContentLoaded", function () {
 
         getData("/entries", function (data) {
