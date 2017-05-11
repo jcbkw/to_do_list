@@ -7,35 +7,72 @@
     function buildToDoPage (title, entries) {
 
         var figureElement = document.createElement("figure"),
+            textInput = document.createElement("input"),
             mainElement = document.createElement("main"),
             section1 = document.createElement("section"),
             section2 = document.createElement("section"),
+            section3 = document.createElement("section"),
             imgElement = document.createElement("img"),
             header = document.createElement("header"),
+            addBtn = document.createElement("button"),
             h1Element = document.createElement("h1"),
-            ulElement = document.createElement("ul"),
-            content = document.createTextNode(title);
+            newEntryTable = document.createElement("ul"),
+            content = document.createTextNode(title),
+            newEntryInputWrapper = document.createElement("div"),
+            newEntryForm = document.createElement("form"),
+            newEntryRow = document.createElement("li"),
+            ulElement2,
+            newEntryButtonWrapper;
 
-            ulElement.classList.add( "table", "item-list");
+            newEntryTable.classList.add( "table", "item-list");
+            addBtn.classList.add("plus-button");
             mainElement.classList.add( "main-wrapper");
-            section1.classList.add( "header-wrapper", "container", "col-md-5", "col-md-offset-4");
-            section2.classList.add( "main-content", "container", "col-md-5", "col-md-offset-4");
-            header.classList.add( "header", "text-primary-color");
+            section1.classList.add("header-wrapper", "container", "col-md-5", "col-md-offset-4");
+            section2.classList.add("main-content", "container", "col-md-5", "col-md-offset-4");
+            section3.classList.add("main-content", "container", "col-md-5", "col-md-offset-4");
+            header.classList.add("header", "text-primary-color");
+            newEntryRow.classList.add("row", "light-primary-color");
+            figureElement.classList.add("img-wrapper");
+            imgElement.classList.add("header-icon");
+            textInput.classList.add("new-entry");
+            newEntryInputWrapper.classList.add("col");
+            
+            
+            textInput.setAttribute("name", "message");
+            textInput.setAttribute("autofocus", "autofocus");
+            textInput.setAttribute("placeholder", "Enter a new note");
+            addBtn.setAttribute("type", "submit");
+            imgElement.setAttribute("src", "../images/plus-4-48.png");
+            imgElement.setAttribute("alt", "Plus one");
 
+            newEntryButtonWrapper = newEntryInputWrapper.cloneNode(true);
+            newEntryButtonWrapper.classList.add("new-entry-btn-wrap");
+            ulElement2 = newEntryTable.cloneNode(true);
+            
+            figureElement.appendChild(imgElement);
+            addBtn.appendChild(figureElement);
+            newEntryInputWrapper.appendChild(textInput);
+            newEntryButtonWrapper.appendChild(addBtn);
+            newEntryRow.appendChild(newEntryInputWrapper);
+            newEntryRow.appendChild(newEntryButtonWrapper);
             h1Element.appendChild(content);
             header.appendChild(h1Element);
+            newEntryTable.appendChild(newEntryRow);
+            newEntryForm.appendChild(newEntryTable);
+            
             section1.appendChild(header);
-            section2.appendChild(ulElement);
+            section2.appendChild(newEntryForm);
+            section2.appendChild(ulElement2);
             mainElement.appendChild(section1);
             mainElement.appendChild(section2);
 
             document.body.appendChild(mainElement);
-            bindEvents(mainElement);    
-    } 
+            
+            } 
 
     function buildATodoList(dataArray){
     
-        var ulElement = document.getElementsByTagName("ul")[0],
+        var ulElement = document.getElementsByTagName("ul")[1],
             liElementCount = 0,
             checkElement,
             editElement,
@@ -131,6 +168,11 @@
     
     }
     
+    /* Update the edit function
+     * 
+     * @param {type} editBtn
+     * @returns {undefined}
+     */
      function editItem(editBtn){
 
         var id = editBtn.parentNode.getAttribute("contact-id");
@@ -147,16 +189,39 @@
 
     }
     
-    
       // Attachings all relevant DOM event handlers here
       
     function bindEvents () {
+       
+        document.getElementsByTagName("form")[0]
+                .addEventListener("submit", formSubmitHandler, false);
 
         document.querySelector("main")
                 .addEventListener("click", handleItemClick, false);
 
     }
 
+     function formSubmitHandler (e) {
+        
+        e.preventDefault();
+
+        var form = this,
+            items = form.querySelectorAll("input[name]"),
+            payload = {},
+            i;
+
+        for (i = 0; i < items.length; i += 1 ){
+
+            var item = items[i];
+
+            payload.message = item.value;
+
+        }
+
+        xhrPost("/entries", payload);
+        
+     }
+        
     function handleItemClick (e){
 
         if (e.target.classList.contains("edit-item")){
@@ -174,13 +239,14 @@
 
     }
    
-    
+  
     document.addEventListener("DOMContentLoaded", function () {
 
         getData("/entries", function (data) {
             
             buildToDoPage("TODO list!", data);
             buildATodoList(data);
+            bindEvents();
             
         });
         

@@ -20,7 +20,22 @@ ul {
     
 }
 
+.new-entry {
+    
+   width: 100%;
+   background-color: #F5F5F5;
+   border:none;
+   outline:none;
+   padding-left: 15px;
+}
 
+
+.plus-button {
+    
+    background:none;
+    border:none;
+    
+}
 .item-list {
     
     list-style-type: none;
@@ -28,11 +43,41 @@ ul {
     
 }
 
+.header-icon {
+    
+    height: 48px;
+    width: auto;
+}
+
+.image-wrapper {
+
+    width: 60px;
+
+}
+
 .col {
     
     vertical-align: middle;
     height: 48px;
     border-bottom: 1px solid #ccc;
+    
+}
+
+.col .new-entry {
+    
+   border-bottom: none;
+    
+}
+
+.col .plus-button {
+    
+   text-align: right;
+    
+}
+
+.new-entry-btn-wrap {
+    
+    width: 64px;
     
 }
 
