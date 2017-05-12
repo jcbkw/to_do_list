@@ -21,7 +21,7 @@
             newEntryInputWrapper = document.createElement("div"),
             newEntryForm = document.createElement("form"),
             newEntryRow = document.createElement("li"),
-            ulElement2,
+            itemList,
             newEntryButtonWrapper;
 
             newEntryTable.classList.add( "table", "item-list");
@@ -47,7 +47,8 @@
 
             newEntryButtonWrapper = newEntryInputWrapper.cloneNode(true);
             newEntryButtonWrapper.classList.add("new-entry-btn-wrap");
-            ulElement2 = newEntryTable.cloneNode(true);
+            itemList = newEntryTable.cloneNode(true);
+            itemList.classList.add( "table", "entry-list");
             
             figureElement.appendChild(imgElement);
             addBtn.appendChild(figureElement);
@@ -62,7 +63,7 @@
             
             section1.appendChild(header);
             section2.appendChild(newEntryForm);
-            section2.appendChild(ulElement2);
+            section2.appendChild(itemList);
             mainElement.appendChild(section1);
             mainElement.appendChild(section2);
 
@@ -72,9 +73,24 @@
 
     function buildATodoList(dataArray){
     
-        var ulElement = document.getElementsByTagName("ul")[1],
-            liElementCount = 0,
-            checkElement,
+        var ulElement = document.querySelector(".entry-list"),
+            row;
+
+        for (var i = 0; i < dataArray.length; i += 1) {
+
+            var todoItem = dataArray[i];
+
+            row = createToDoListItem(todoItem);
+
+            ulElement.appendChild(row);  
+            
+        }
+    
+    }
+    
+    function createToDoListItem (todoItem) {
+        
+        var checkElement,
             deleteElement,
             deleteColumn,
             editElement,
@@ -82,61 +98,52 @@
             checkColumn,
             column,
             row,
-            listIndex,
             todoMessage,
             listText;
+        
+        row = document.createElement("li");       
+        listText = document.createTextNode(todoItem.message);
+        checkElement = document.createElement("button");
+        deleteElement = document.createElement("button");
+        editElement = document.createElement("button");
+        column = document.createElement("div");
+        todoMessage = document.createElement("span");
 
+        row.classList.add("row", "light-primary-color");
+        column.classList.add("col");
+        todoMessage.classList.add("item-message");
+        row.setAttribute("item-id", todoItem.id);
+        row.setAttribute("item-status", todoItem.status);
+        checkElement.classList.add("fa", "fa-check-square-o", "fa-lg", "check-item", "action-item");
+        deleteElement.classList.add( "fa", "fa-times", "fa-lg", "delete-item", "action-item");
+        editElement.classList.add( "fa", "fa-pencil", "fa-lg", "edit-item", "action-item");
+        checkElement.setAttribute("type", "button");
+        deleteElement.setAttribute("type", "button");
+        editElement.setAttribute("type", "button");
 
-        for (var i = 0; i < dataArray.length; i += 1) {
+        checkColumn = column.cloneNode(true);
+        checkColumn.classList.add("action");
+        deleteColumn = checkColumn.cloneNode(true);
+        editColumn = checkColumn.cloneNode(true);
 
-          var todoItem = dataArray[i];
-
-            liElementCount +=1;  //May use this to index as a unique identifier for contacts.           
-            listText = document.createTextNode(todoItem.message);
-            checkElement = document.createElement("button");
-            deleteElement = document.createElement("button");
-            editElement = document.createElement("button");
-            column = document.createElement("div");
-            todoMessage = document.createElement("span");
-            row = document.createElement("li");
-
-            row.classList.add("row", "light-primary-color");
-            column.classList.add("col");
-            todoMessage.classList.add("item-message");
-            row.setAttribute("item-id", todoItem.id);
-            row.setAttribute("item-status", todoItem.status);
-            checkElement.classList.add("fa", "fa-check-square-o", "fa-lg", "check-item", "action-item");
-            deleteElement.classList.add( "fa", "fa-times", "fa-lg", "delete-item", "action-item");
-            editElement.classList.add( "fa", "fa-pencil", "fa-lg", "edit-item", "action-item");
-            checkElement.setAttribute("type", "button");
-            deleteElement.setAttribute("type", "button");
-            editElement.setAttribute("type", "button");
-
-            checkColumn = column.cloneNode(true);
-            checkColumn.classList.add("action");
-            deleteColumn = checkColumn.cloneNode(true);
-            editColumn = checkColumn.cloneNode(true);
-            
-            todoMessage.appendChild(listText);
-            column.appendChild(todoMessage);
-            checkColumn.appendChild(checkElement);
-            deleteColumn.appendChild(deleteElement);
-            editColumn.appendChild(editElement);
-            row.appendChild(checkColumn);
-            row.appendChild(column);
-            row.appendChild(editColumn);
-            row.appendChild(deleteColumn);
-
-            ulElement.appendChild(row);  
-            
-            if (todoItem.status === STATUS_DONE) {
+        todoMessage.appendChild(listText);
+        column.appendChild(todoMessage);
+        checkColumn.appendChild(checkElement);
+        deleteColumn.appendChild(deleteElement);
+        editColumn.appendChild(editElement);
+        row.appendChild(checkColumn);
+        row.appendChild(column);
+        row.appendChild(editColumn);
+        row.appendChild(deleteColumn);
+        
+        if (todoItem.status === STATUS_DONE) {
                 
-                row.classList.add("checked");
-                
-            }
-            
+            row.classList.add("checked");
+
         }
-    
+        
+        return row;
+        
     }
     
     function markedItem(btn){
@@ -231,29 +238,37 @@
                 id: id,
                 message: input.value
             };
+           
         
         xhrPatch("/entries", payload, function (error){
-
+            
             if (error) {
                 
                 return alert(error);
                 
             }
             
-            location.reload();
+            var text = document.createTextNode(payload.message);
+            var message = row.querySelector(".item-message");
+                  
+            input.removeEventListener("blur", onItemBlurred, false);
+            input.parentNode.removeChild(input);
+            message.removeChild(message.firstChild);
+            message.appendChild(text);
+                            
+            message.style.display = "";
             
-        });
-        
+        });  
+
     }
-    
+          
     function handleKeyup (e) {
         
         if(e.which === 13) {
             
-            onItemBlurred(e);
+            document.querySelector(".new-entry").focus();
             
         }
-        
         
     }
     
@@ -312,25 +327,27 @@
         e.preventDefault();
 
         var form = this,
-            items = form.querySelectorAll("input[name]"),
-            payload = {},
-            i;
+            input = form.querySelector(".new-entry"),
+            payload = {message: input.value};
 
-        for (i = 0; i < items.length; i += 1 ){
+        xhrPost("/entries", payload, function(error, newEntry){
+            
+            if (!error) {
 
-            var item = items[i];
+                var todoItem = JSON.parse(newEntry);
 
-            payload.message = item.value;
-
-        }
-
-        xhrPost("/entries", payload, function(error){
+                document.querySelector(".entry-list").
+                        insertBefore(createToDoListItem(todoItem), 
+                        document.querySelector(".entry-list").firstChild
+                );
                 
-                if (!error) {
-                    
-                    location.reload(); 
-                    
-                }
+                input.value = "";
+            }
+            else  {
+                
+                alert(error + " try again");
+            
+            }
                 
         });
         
