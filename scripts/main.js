@@ -40,6 +40,7 @@
             
             textInput.setAttribute("name", "message");
             textInput.setAttribute("autofocus", "autofocus");
+            textInput.setAttribute("autocomplete", "off");
             textInput.setAttribute("placeholder", "Enter a new note");
             addBtn.setAttribute("type", "submit");
             imgElement.setAttribute("src", "../images/plus-4-48.png");
