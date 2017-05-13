@@ -12,7 +12,7 @@
             section1 = document.createElement("section"),
             section2 = document.createElement("section"),
             section3 = document.createElement("section"),
-            imgElement = document.createElement("img"),
+            imgElement = document.createElement("div"),
             header = document.createElement("header"),
             addBtn = document.createElement("button"),
             h1Element = document.createElement("h1"),
@@ -33,7 +33,7 @@
             header.classList.add("header", "text-primary-color");
             newEntryRow.classList.add("row", "light-primary-color");
             figureElement.classList.add("img-wrapper");
-            imgElement.classList.add("header-icon");
+            imgElement.classList.add("header-icon", "fa",  "fa-plus-circle");
             textInput.classList.add("new-entry", "seamless");
             newEntryInputWrapper.classList.add("col");
             
@@ -43,13 +43,14 @@
             textInput.setAttribute("autocomplete", "off");
             textInput.setAttribute("placeholder", "Enter a new note");
             addBtn.setAttribute("type", "submit");
-            imgElement.setAttribute("src", "../images/plus-4-48.png");
+//          imgElement.setAttribute("src", "../images/plus-4-48.png");
             imgElement.setAttribute("alt", "Plus one");
 
             newEntryButtonWrapper = newEntryInputWrapper.cloneNode(true);
             newEntryButtonWrapper.classList.add("new-entry-btn-wrap");
             itemList = newEntryTable.cloneNode(true);
             itemList.classList.add( "table", "entry-list");
+            newEntryTable.classList.add( "new-item-list");
             
             figureElement.appendChild(imgElement);
             addBtn.appendChild(figureElement);
@@ -330,6 +331,12 @@
         var form = this,
             input = form.querySelector(".new-entry"),
             payload = {message: input.value};
+
+        if (payload.message.trim() === "") {
+            
+            return;
+            
+        }
 
         xhrPost("/entries", payload, function(error, newEntry){
             

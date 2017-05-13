@@ -26,11 +26,18 @@ ul {
    
 }
 
+.new-item-list .row {
+    
+    color: #888;
+    
+}
+
 
 .plus-button {
     
     background:none;
     border:none;
+    outline:none;
     
 }
 .item-list {
@@ -40,10 +47,19 @@ ul {
     
 }
 
-.header-icon {
+main .header-icon {
     
-    height: 48px;
-    width: auto;
+    color: #009c1e;
+    font-size: 20px;
+    transition: all .25s ease-out;
+    
+}
+
+.header-icon:hover {
+    
+    font-size: 30px;
+    transform: rotate(90deg);
+    
 }
 
 .image-wrapper {
@@ -63,18 +79,20 @@ ul {
 .col .new-entry {
     
    border-bottom: none;
+   
     
 }
 
 .col .plus-button {
     
-   text-align: right;
+   /*text-align: right;*/
     
 }
 
 .new-entry-btn-wrap {
     
-    width: 64px;
+    width: 48px;
+    text-align: center;
     
 }
 
